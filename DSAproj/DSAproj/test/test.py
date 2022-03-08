@@ -1,5 +1,5 @@
 import unittest
-from calculator import Clause
+from src.calculator import Clause
 
 class Test(unittest.TestCase):
     def testSplit(self):

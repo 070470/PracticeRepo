@@ -2,7 +2,7 @@
 # This program is a simple calculator that can process
 # mathematical clauses given by a user. It supports some
 # built-in functions along with the basic operations
-# (addition, subtraction, division and multiplication), whilewhile
+# (addition, subtraction, division and multiplication), while
 # also taking parentheses into account.
 # _____________________________________________________________
 
@@ -63,14 +63,16 @@ def shuntingYard (list):
             operstack.append(token)
         elif isinstance(token, character) and token != ("(" or ")"):
             elem = operstack[-1]
-            while ((elem != "(") and (precedence(token) < precedence(elem))
-                or ((precedence(token) == precedence(elem)) and associative(token))):
+            while ((elem != "(") and ((precedence(token) < precedence(elem))
+                or ((precedence(token) == precedence(elem)) and associative(token)))):
                 outputq.append(operstack.pop())
             operstack.append(token)
         elif token == "(":
             operstack.append(token)
         elif token == ")":
-            while
+            while (peek(operstack) != ("(")):
+                assert len(operstack) > 0
+                outputq.append(operstack.pop())
 
 
         break
