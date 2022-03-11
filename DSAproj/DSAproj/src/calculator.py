@@ -86,6 +86,7 @@ def shuntingYard (clause):
     operstack = deque()
     i = 0
     while i < len(clause):
+        # print("Iteration " + str(i) + ":")
         if isinstance(clause[i], float) or isinstance (clause[i], int):
             outputq.put(clause[i])
         elif clause[i] != "(" and  clause[i] != ")":
@@ -103,6 +104,8 @@ def shuntingYard (clause):
                 assert peek(operstack) == "("
                 operstack.pop()
         i += 1
+        # print("Stack: " + str(operstack))
+        # print("Queue: " + str(outputq.queue))
     while (len(operstack) > 0):
         assert peek(operstack) != "(" and peek(operstack) != ")"
         outputq.put(operstack.pop())
@@ -113,6 +116,7 @@ def postFixEval (queue):
     operators = deque()
     q = list(queue.queue)
     for token in q:
+        print(token)
         if isinstance(token, int):
             operators.append(token)
         elif token == "+":
@@ -131,10 +135,11 @@ def postFixEval (queue):
             b = operators.pop()
             a = operators.pop()
             operators.append(a / b)
-        else:
+        elif token == "^":
             b = operators.pop()
             a = operators.pop()
             operators.append(a**b)
+        print("Stack: " + str(operators))
     return operators.pop()
 
 def main():
