@@ -7,7 +7,6 @@
 # _____________________________________________________________
 
 from queue import Empty, Queue
-from typing import Deque
 from numpy import character
 from collections import deque
 
@@ -28,17 +27,13 @@ class Clause:
         return len(self.items)
 """
 
-# Convert the input string into an array
-def convert(string): 
+def Convert(string):    #convert string into array
     list1=[]
     list1[:0]=string
     return list1
 
-# Create a new array where all elements are correctly separated (e.g. numbers with multiple digits
-# are registered as one number and not separate elements)
-
-def separate (clause): 
-    elemList = convert(clause)
+def separate (clause):
+    elemList = Convert(clause)
     readyList = []
     i = 0
     while i < len(elemList):
@@ -52,23 +47,20 @@ def separate (clause):
                 i+=1
             readyList.append(int(numbers))
             numbers = ""
-        elif elemList[i] == "s":
-            readyList.append("sqrt")
-            i += 4
         else:
             readyList.append(elemList[i])
-            print(type(elemList[i]))
             i += 1
     return readyList
 
 # Transform list into stack
-
+"""
 def stackify (clause):
     clause.reverse()
     charStack = deque()
     for elem in clause:
         charStack.append(elem)
     return charStack
+"""
 
 # Set operator precedence
 def precedence (elem):
@@ -96,76 +88,60 @@ def shuntingYard (clause):
     while i < len(clause):
         if isinstance(clause[i], float) or isinstance (clause[i], int):
             outputq.put(clause[i])
-            print("alright")
-            i += 1
-        elif clause[i] != ("(" or ")"):
-            print("okay")
-            if len(operstack) > 1:
-                while ((operstack[-1] != "(") and ((precedence(clause[i]) < precedence(operstack[-1]))
-                    or ((precedence(clause[i]) == precedence(operstack[-1])) and associative(clause[i])))):
-                    outputq.put(operstack.pop())
-                    i += 1
-                    print(i)
-                operstack.append(clause[i])
-        elif clause[i] == "(":
-            print("hi")
+        elif clause[i] != "(" and  clause[i] != ")":
+            while len(operstack) > 0 and (peek(operstack) != "(" and ((precedence(clause[i]) > precedence(peek(operstack)))
+                or ((precedence(clause[i]) == precedence(peek(operstack))) and associative(clause[i])))):
+                outputq.put(operstack.pop())
             operstack.append(clause[i])
-            i += 1
+        elif clause[i] == "(":
+            operstack.append(clause[i])
         elif clause[i] == ")":
-            if len(operstack) > 1:
-                while (operstack[-1] != ("(")):
+            if len(operstack) > 0:
+                while (peek(operstack) != "("):
                     assert len(operstack) > 0
                     outputq.put(operstack.pop())
-                assert (operstack[-1] == "(")
+                assert peek(operstack) == "("
                 operstack.pop()
-        else:
-            print("ok")
         i += 1
     while (len(operstack) > 0):
-        assert operstack[-1] != ("(" or ")")
+        assert peek(operstack) != "(" and peek(operstack) != ")"
         outputq.put(operstack.pop())
-    print (outputq.queue)
-    print(operstack)
     return outputq
-
 
 # Evaluating the postfix expression / solving the operation
 def postFixEval (queue):
-    print(queue.queue)
-    operstack = deque()
-    while queue.qsize() > 0:
-        token = queue.get()    # front?
+    operators = deque()
+    q = list(queue.queue)
+    for token in q:
         if isinstance(token, int):
-            operstack.append(token)
-        elif isinstance(token, character):
-            if token == "+":
-                b = operstack.pop()
-                a = operstack.pop()
-                operstack.append(a + b)
-            if token == "-":
-                b = operstack.pop()
-                a = operstack.pop()
-                operstack.append(a - b)
-            if token == "*":
-                b = operstack.pop()
-                a = operstack.pop()
-                operstack.append(a * b)
-            if token == "/":
-                b = operstack.pop()
-                a = operstack.pop()
-                operstack.append(a / b)
-            if token == "^":
-                b = operstack.pop()
-                a = operstack.pop()
-                operstack.append(a ^ b)
-        return operstack.pop()
+            operators.append(token)
+        elif token == "+":
+            b = operators.pop()
+            a = operators.pop()
+            operators.append(a + b)
+        elif token == "-":
+            b = operators.pop()
+            a = operators.pop()
+            operators.append(a - b)
+        elif token == "*":
+            b = operators.pop()
+            a = operators.pop()
+            operators.append(a * b)
+        elif token == "/":
+            b = operators.pop()
+            a = operators.pop()
+            operators.append(a / b)
+        else:
+            b = operators.pop()
+            a = operators.pop()
+            operators.append(a**b)
+    return operators.pop()
 
 def main():
     expression = input("Give an operation: ")
     expression = separate(expression)
-    expression = stackify(expression)
     expression = shuntingYard(expression)
-    print(postFixEval(expression))
+    print("The result is " + str(postFixEval(expression)))
 
 if __name__ == "__main__":
     main()
