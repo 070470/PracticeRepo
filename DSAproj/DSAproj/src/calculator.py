@@ -6,38 +6,29 @@
 # also taking parentheses into account.
 # _____________________________________________________________
 
-from queue import Empty, Queue
-from numpy import character
+from queue import Queue
 from collections import deque
+import test
+import unittest
 
 """
-# Creating the structure and the functions for the clause
-class Clause:   
-    def __init__(self, inputClause):
-        self.inputClause = inputClause
-
-    def printResult(self):
-        print ("")
-
-    # Turning the clause from a string into a list of characters
-    def split(self):
-        return list(self.inputClause)
-
-    def length(self):
-        return len(self.items)
+def tests():
+    suite = unittest.TestLoader().loadTestsFromModule(test) 
+    unittest.TextTestRunner(verbosity=2).run(suite)
 """
 
-def Convert(string):    #convert string into array
-    list1=[]
-    list1[:0]=string
-    return list1
+def convert(string):    # convert string into array
+    list=[]
+    list[:0]=string
+    return list
 
 def separate (clause):
-    elemList = Convert(clause)
+    elemList = convert(clause)
     readyList = []
     i = 0
+    opers = ["(", ")", "/", "*", "+", "-", "^"]
     while i < len(elemList):
-        if elemList[i] == ("("  or ")" or "/" or "*" or "+" or "-" or "^"):
+        if elemList[i] in opers:
             readyList.append(elemList[i])
             i += 1
         elif elemList[i].isnumeric():
@@ -48,19 +39,9 @@ def separate (clause):
             readyList.append(int(numbers))
             numbers = ""
         else:
-            readyList.append(elemList[i])
+            raise Exception ("Input contains invalid symbols; accepted include (, ), /, *, +, -, ^")
             i += 1
     return readyList
-
-# Transform list into stack
-"""
-def stackify (clause):
-    clause.reverse()
-    charStack = deque()
-    for elem in clause:
-        charStack.append(elem)
-    return charStack
-"""
 
 # Set operator precedence
 def precedence (elem):
@@ -76,17 +57,16 @@ def associative (elem):
     if elem == "/" or elem == "-" or elem == "+" or elem == "*":
         return True
 
+# Get element on top of stack
 def peek (elem):
     return elem[-1]
 
 # Shunting-yard algorithm for transforming the clause from infix to postfix form
 def shuntingYard (clause):
-    # Creating the output queue and operator stack
     outputq = Queue()
     operstack = deque()
     i = 0
     while i < len(clause):
-        # print("Iteration " + str(i) + ":")
         if isinstance(clause[i], float) or isinstance (clause[i], int):
             outputq.put(clause[i])
         elif clause[i] != "(" and  clause[i] != ")":
@@ -104,8 +84,6 @@ def shuntingYard (clause):
                 assert peek(operstack) == "("
                 operstack.pop()
         i += 1
-        # print("Stack: " + str(operstack))
-        # print("Queue: " + str(outputq.queue))
     while (len(operstack) > 0):
         assert peek(operstack) != "(" and peek(operstack) != ")"
         outputq.put(operstack.pop())
@@ -116,7 +94,6 @@ def postFixEval (queue):
     operators = deque()
     q = list(queue.queue)
     for token in q:
-        print(token)
         if isinstance(token, int):
             operators.append(token)
         elif token == "+":
@@ -139,7 +116,6 @@ def postFixEval (queue):
             b = operators.pop()
             a = operators.pop()
             operators.append(a**b)
-        print("Stack: " + str(operators))
     return operators.pop()
 
 def main():
