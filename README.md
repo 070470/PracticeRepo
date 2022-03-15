@@ -1,4 +1,4 @@
-# PracticeRepo
+# Calculator project
 [Specification](https://github.com/070470/PracticeRepo/files/8257508/specification.md)
 
 [Instruction manual](https://github.com/070470/PracticeRepo/files/8257509/instructionmanual.md)
