@@ -10,4 +10,8 @@ The program accepts inputs containing the following symbols: ()/+*-^ , and any n
 can give any mathematical expression containing the above symbols for the program to solve. After evaluating
 the expression, the program gives the solution of the operation as an output into the terminal.
 
-
+## Running tests
+The tests can be run in the same source folder with the command
+> coverage run --branch -m unittest testCalculator
+A coverage report can be created with the command
+> coverage html
