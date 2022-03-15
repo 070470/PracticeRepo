@@ -6,8 +6,8 @@ Python, and I'm comfortable reviewing projects written in Java as well as
 Python.
 
 ## About the project
-The program I'm going to write is a simple calculator that takes operations
-given as user input, and analyzes and solves them. I'm not using an existing
-algorithm to dissect the input, but rather will come up with one of my own.
-After analyzing the input, I might, however, use existing operations such as
-sqrt    
+The program I'm going to write is a simple calculator that takes mathematical operations
+given as user input and solves them. I will do this by implementing the shunting yard algorithm
+along with a postfix stack evaluation method. This approach to parsing mathematical expressions
+and solving them is rather widely implemented and easily expandable to even more complex calculator
+functions. The algorithms I'm using should allow for a time and space complexity of O(n).
