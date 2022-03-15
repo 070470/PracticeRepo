@@ -13,5 +13,6 @@ the expression, the program gives the solution of the operation as an output int
 ## Running tests
 The tests can be run in the same source folder with the command
 > coverage run --branch -m unittest testCalculator
+
 A coverage report can be created with the command
 > coverage html
