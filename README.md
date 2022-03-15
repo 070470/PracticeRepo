@@ -5,4 +5,4 @@
 
 [Implementation document](documentation/implementationdocument.md)
 
-[Testing instructions](documentation/testingdocument.md)
+[Testing document](documentation/testingdocument.md)
