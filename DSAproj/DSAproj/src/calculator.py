@@ -8,7 +8,6 @@
 
 from queue import Queue
 from collections import deque
-import test
 import unittest
 
 """
@@ -88,6 +87,7 @@ def shuntingYard (clause):
         assert peek(operstack) != "(" and peek(operstack) != ")"
         outputq.put(operstack.pop())
     return outputq
+
 
 # Evaluating the postfix expression / solving the operation
 def postFixEval (queue):
