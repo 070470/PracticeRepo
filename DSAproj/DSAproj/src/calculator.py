@@ -1,25 +1,21 @@
 # _____________________________________________________________
 # This program is a simple calculator that can process
-# mathematical clauses given by a user. It supports some
-# built-in functions along with the basic operations
-# (addition, subtraction, division and multiplication), while
-# also taking parentheses into account.
+# mathematical clauses given by a user. It supports addition,
+# subtraction, multiplication, division and powers, and also
+# takes parentheses into account.
 # _____________________________________________________________
 
 from queue import Queue
 from collections import deque
-import unittest
 
-"""
-def tests():
-    suite = unittest.TestLoader().loadTestsFromModule(test) 
-    unittest.TextTestRunner(verbosity=2).run(suite)
-"""
-
-def convert(string):    # convert string into array
+# Takes user input string and converts it into list of individual characters
+def convert(string):    
     list=[]
     list[:0]=string
     return list
+
+# Goes through the numbers in the list, and makes sure that the multi-digit numbers in the
+# operation given by the user are registered as one element and not several different numbers
 
 def separate (clause):
     elemList = convert(clause)
@@ -38,11 +34,12 @@ def separate (clause):
             readyList.append(int(numbers))
             numbers = ""
         else:
-            raise Exception ("Input contains invalid symbols; accepted include (, ), /, *, +, -, ^")
             i += 1
+            raise Exception ("Input contains invalid symbols; accepted include (, ), /, *, +, -, ^")
     return readyList
+    # Output is a list containing each element of theoperation given by the user
 
-# Set operator precedence
+# Gives operator precedence for comparing operators in the shunting yard algorithm
 def precedence (elem):
     if elem == "^":
         return 1
@@ -51,16 +48,18 @@ def precedence (elem):
     elif elem == "+" or elem == "-":
         return 3
 
-# Check whether operator is left-associative
+# Checks whether operator is left-associative, used in
+# comparing operators in the shunting yard algorithm
 def associative (elem):
     if elem == "/" or elem == "-" or elem == "+" or elem == "*":
         return True
 
-# Get element on top of stack
+# Gets element on top of the stack
 def peek (elem):
     return elem[-1]
 
-# Shunting-yard algorithm for transforming the clause from infix to postfix form
+# Shunting-yard algorithm for transforming the input clause
+# (now transformed into a list) from infix into postfix form
 def shuntingYard (clause):
     outputq = Queue()
     operstack = deque()
@@ -87,9 +86,13 @@ def shuntingYard (clause):
         assert peek(operstack) != "(" and peek(operstack) != ")"
         outputq.put(operstack.pop())
     return outputq
+    # Output is a queue where the elements are in postfix form
 
 
-# Evaluating the postfix expression / solving the operation
+# Evaluating the postfix expression given by the shunting yard
+# algorithm and solving the operation by doing the operations in
+# the order determined by operator precedence and parentheses
+
 def postFixEval (queue):
     operators = deque()
     q = list(queue.queue)
@@ -117,6 +120,7 @@ def postFixEval (queue):
             a = operators.pop()
             operators.append(a**b)
     return operators.pop()
+    # Output is the result of the mathematical expression given by the user in the beginning
 
 def main():
     expression = input("Give an operation: ")
